@@ -5,12 +5,19 @@ import android.annotation.SuppressLint;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Typeface;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
-
-import com.example.staranimation.databinding.ActivityFullscreenBinding;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -95,18 +102,35 @@ public class FullscreenActivity extends AppCompatActivity {
             return false;
         }
     };
-    private ActivityFullscreenBinding binding;
+
+    Typeface codystarFont;
+    Typeface contrailFont;
+    TextView txtTitle;
+    Button btnDummy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_fullscreen);
 
-        binding = ActivityFullscreenBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+
+        ActionBar myActionBar = getSupportActionBar();
+        if(myActionBar != null){
+            myActionBar.setCustomView(R.layout.action_bar_center);
+            myActionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        }
+
+        codystarFont = Typeface.createFromAsset(getAssets(), "Fonts/Codystar-Regular.ttf");
+        contrailFont = Typeface.createFromAsset(getAssets(), "Fonts/ContrailOne-Regular.ttf");
+        txtTitle = findViewById(R.id.txtTitle);
+        btnDummy = findViewById(R.id.dummy_button);
+
+        txtTitle.setTypeface(contrailFont);
+        btnDummy.setTypeface(codystarFont);
 
         mVisible = true;
-        mControlsView = binding.fullscreenContentControls;
-        mContentView = binding.fullscreenContent;
+        mControlsView = findViewById(R.id.fullscreen_content_controls);
+        mContentView = findViewById(R.id.fullscreen_content);
 
         // Set up the user interaction to manually show or hide the system UI.
         mContentView.setOnClickListener(new View.OnClickListener() {
@@ -119,8 +143,14 @@ public class FullscreenActivity extends AppCompatActivity {
         // Upon interacting with UI controls, delay any scheduled hide()
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
-        binding.dummyButton.setOnTouchListener(mDelayHideTouchListener);
+        findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
     }
+
+    AnimationDrawable starListAnimation;
+    FrameLayout animationContainer;
+    AnimationSet myAnimationSet;
+    Animation fadeEffect;
+    Animation rotateItself;
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -130,13 +160,37 @@ public class FullscreenActivity extends AppCompatActivity {
         // created, to briefly hint to the user that UI controls
         // are available.
         delayedHide(100);
-    }
 
+        ImageView starImage = findViewById(R.id.starImage);
+        starImage.setBackgroundResource(R.drawable.star_animation_list);
+        starListAnimation = (AnimationDrawable) starImage.getBackground();
+        starListAnimation.start();
+
+        animationContainer = findViewById(R.id.animationContainer);
+
+        fadeEffect = AnimationUtils.loadAnimation(this, R.anim.fade_effect_);
+        rotateItself = AnimationUtils.loadAnimation(this, R.anim.rotate_itself);
+
+        myAnimationSet = new AnimationSet(true);
+        myAnimationSet.addAnimation(fadeEffect);
+        myAnimationSet.addAnimation(rotateItself);
+
+        myAnimationSet.setDuration(1500);
+
+        starImage.setAnimation(myAnimationSet);
+
+        myAnimationSet.start();
+    }
     private void toggle() {
         if (mVisible) {
+
             hide();
+            mContentView.setAlpha(0);
+            animationContainer.setVisibility(View.VISIBLE);
         } else {
             show();
+            mContentView.setAlpha(1);
+            animationContainer.setVisibility(View.INVISIBLE);
         }
     }
 

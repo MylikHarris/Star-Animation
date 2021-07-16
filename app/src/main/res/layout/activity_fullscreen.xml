@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/fullscreenBackgroundColor"
-    android:theme="@style/ThemeOverlay.StarAnimation.FullscreenContainer"
+    android:background="@color/colorPrimary"
     tools:context=".FullscreenActivity">
 
     <TextView
@@ -13,8 +12,8 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:keepScreenOn="true"
-        android:text="@string/dummy_content"
-        android:textColor="?attr/fullscreenTextColor"
+        android:text="@string/starAnimationMessage"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="50sp"
         android:textStyle="bold" />
 
@@ -30,6 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
+            android:background="@color/colorPrimaryDark"
             android:orientation="horizontal"
             tools:ignore="UselessParent">
 
@@ -39,9 +39,24 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/dummy_button" />
+                android:textSize="20sp"
+                android:text="@string/btnClickOnScreenMessage"
+                android:textColor="@color/colorAccent"/>
 
         </LinearLayout>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:visibility="invisible"
+            android:id="@+id/animationContainer">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/starImage"
+                android:layout_gravity="center"/>
+        </FrameLayout>
     </FrameLayout>
 
 </FrameLayout>
