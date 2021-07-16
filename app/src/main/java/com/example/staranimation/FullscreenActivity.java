@@ -151,6 +151,7 @@ public class FullscreenActivity extends AppCompatActivity {
     AnimationSet myAnimationSet;
     Animation fadeEffect;
     Animation rotateItself;
+    Animation circleRotate;
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -170,14 +171,34 @@ public class FullscreenActivity extends AppCompatActivity {
 
         fadeEffect = AnimationUtils.loadAnimation(this, R.anim.fade_effect_);
         rotateItself = AnimationUtils.loadAnimation(this, R.anim.rotate_itself);
+        circleRotate = AnimationUtils.loadAnimation(this, R.anim.circle_rotate);
 
         myAnimationSet = new AnimationSet(true);
         myAnimationSet.addAnimation(fadeEffect);
         myAnimationSet.addAnimation(rotateItself);
+        myAnimationSet.addAnimation(circleRotate);
 
         myAnimationSet.setDuration(1500);
 
         starImage.setAnimation(myAnimationSet);
+
+        myAnimationSet.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                animation.reset();
+                animation.start();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
 
         myAnimationSet.start();
     }
